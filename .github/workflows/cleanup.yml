@@ -1,0 +1,49 @@
+name: Remove template demo content
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Remove demo content and unused template pages
+        run: |
+          git config user.name "AdvocatePergola"
+          git config user.email "CheryManon2892@hotmail.com"
+          git rm -r --ignore-unmatch \
+            _publications/2024-02-17-paper-title-number-4.md \
+            _talks _teaching _portfolio _posts \
+            _pages/talks.html \
+            _pages/teaching.html \
+            _pages/portfolio.html \
+            _pages/talkmap.html \
+            _pages/year-archive.html \
+            _pages/tag-archive.html \
+            _pages/category-archive.html \
+            _pages/page-archive.html \
+            _pages/collection-archive.html \
+            _pages/archive-layout-with-content.md \
+            _pages/non-menu-page.md \
+            _pages/markdown.md \
+            _pages/terms.md \
+            _pages/cv-json.md \
+            _data/cv.json \
+            _data/comments \
+            files \
+            talkmap.py \
+            talkmap.ipynb \
+            markdown_generator \
+            .github/workflows/scrape_talks.yml \
+            .github/workflows/bad-pr.yml \
+            .github/workflows/jekyll-build.yml \
+            .github/workflows/cleanup.yml
+          git commit -m "Remove template demo content and unused template pages"
+          git push origin master
