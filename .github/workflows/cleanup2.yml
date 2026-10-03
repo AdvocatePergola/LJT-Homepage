@@ -1,0 +1,34 @@
+name: Final cleanup and build check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+      - name: Remove remaining template demo artifacts
+        run: |
+          git rm -r --ignore-unmatch talkmap talkmap_out.ipynb _drafts .github/workflows/cleanup2.yml
+      - name: Build site
+        run: bundle exec jekyll build --strict_front_matter
+        env:
+          JEKYLL_ENV: production
+      - name: Commit and push
+        run: |
+          git config user.name "AdvocatePergola"
+          git config user.email "CheryManon2892@hotmail.com"
+          git commit -m "Remove remaining template demo artifacts"
+          git push origin master
